@@ -6,7 +6,7 @@ ContextualRelevancy) can execute end-to-end, WITHOUT touching any MCP server,
 MongoDB, or the remote AI API.
 
 Judge is selected by EVAL_JUDGE env var:
-  mock      — fake judge, instant, fixed 0.75 score, no network (default)
+  mock      — MockJudge, fixed passing score 1.0, instant, no network (default)
   ollama    — qwen2.5:3b via OllamaModel, real scores, slow
   anthropic — AnthropicModel + CLAUDE_MODEL, real scores, needs ANTHROPIC_API_KEY
 
@@ -46,7 +46,7 @@ print()
 print(f"  EVAL_JUDGE        : {EVAL_JUDGE}")
 
 if EVAL_JUDGE == "mock":
-    print(f"  Judge             : MockJudge (fixed 0.75 score, instant, no network)")
+    print(f"  Judge             : MockJudge (fixed passing score 1.0, instant, no network)")
     print(f"  Judge class       : MockJudge (subclasses DeepEvalBaseLLM)")
 elif EVAL_JUDGE == "ollama":
     print(f"  Judge             : qwen2.5:3b (local Ollama, zero cost)")
@@ -247,7 +247,7 @@ total = total_pass + total_fail
 print(f"\nResults: {total_pass} passed, {total_fail} failed out of {total} metric evaluations.")
 
 if EVAL_JUDGE == "mock":
-    print("\n(MOCK mode — all scores are fixed at 0.75, plumbing only)")
+    print("\n(MOCK mode — all scores are fixed at 1.0, plumbing only)")
     print("Switch to EVAL_JUDGE=ollama for real scored metrics.")
 elif EVAL_JUDGE == "ollama":
     print("\n(OLLAMA mode — real scores from qwen2.5:3b, slow but free)")

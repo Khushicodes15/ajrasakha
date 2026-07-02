@@ -50,6 +50,17 @@ def evaluate_response_quality(result: dict, enabled: bool = False) -> dict:
     retrieval_context = result.get("context") or []
 
     # ------------------------------------------------------------------
+    # Guard: empty query or answer (matches deepeval_metrics.py behavior)
+    # ------------------------------------------------------------------
+    if not query or not str(query).strip() or not answer or not str(answer).strip():
+        return _quality_dict(
+            answerrelevancy={"score": "", "passed": "", "reason": "answer_missing"},
+            faithfulness={"score": "", "passed": "", "reason": "answer_missing"},
+            contextual_relevancy={"score": "", "passed": "", "reason": "answer_missing"},
+            enabled=True,
+        )
+
+    # ------------------------------------------------------------------
     # Stub — preserve return shape so CSV column positions never shift
     # ------------------------------------------------------------------
     if not enabled:

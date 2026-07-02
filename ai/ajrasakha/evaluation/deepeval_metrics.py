@@ -12,7 +12,7 @@ def _build_metric(metric_cls, threshold: float = 0.5):
     """
     Build a DeepEval metric with an AnthropicModel judge if
     ANTHROPIC_API_KEY is present, otherwise fall back to DeepEval
-    defaults (OpenAI or configured default).
+    defaults.
 
     Bug fixes applied (deepeval v4.0.7):
       (a) ClaudeModel -> AnthropicModel  (ClaudeModel does not exist in v4.0.7)
@@ -20,7 +20,6 @@ def _build_metric(metric_cls, threshold: float = 0.5):
       (c) retrieval_context field name is correct in LLMTestCase; no change needed
     """
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
-    openai_key = os.getenv("OPENAI_API_KEY")
 
     if anthropic_key:
         try:
@@ -30,9 +29,6 @@ def _build_metric(metric_cls, threshold: float = 0.5):
             return metric_cls(threshold=threshold, model=judge_model)
         except Exception:
             return metric_cls(threshold=threshold)
-
-    if openai_key:
-        return metric_cls(threshold=threshold)
 
     return metric_cls(threshold=threshold)
 
